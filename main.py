@@ -10,6 +10,8 @@ class Sistema():
 		self.turma_132 = []
 		self.turma_133 = []
 		self.turmas = [self.turma_132, self.turma_133]
+		self.respostas_positivas = {"sim","Si", "s", "yes", "y", "presente", "positivo"}
+		self.respostas_negativas = {"n", "nao", "no", "negativo"}
 		
 	def criar_aluno(self):
 		nome = input("Digite o nome do aluno: ").strip().title()
@@ -88,6 +90,26 @@ class Sistema():
 						print("Opcao inexistente")		
 					
 	
+	def excluir_aluno(self):
+		try:
+			matricula_aluno = int(input("Digite a matricula do aluno que quer excluir: "))
+			for turma in self.turmas:
+				for aluno in turma:
+					if aluno.matricula == matricula_aluno:
+						pergunta = input(f"Deseja mesmo apagar o aluno {aluno.nome}? ").strip().lower()
+						if pergunta in self.respostas_positivas:
+							turma.remove(aluno)
+							print("Aluno excluído com sucesso.")
+							return
+						else:
+							print("Aluno NÃO exlcuido")
+							return
+			print("Aluno não encontrado")
+		except ValueError:
+			print("Apenas números inteiros são aceitos")
+		
+					
+	
 	def popular_testes(self):
 		zeca = Aluno("Zecaaaa", 1, "turma_132")
 		self.turma_132.append(zeca)
@@ -104,22 +126,22 @@ class Sistema():
 			print("3 - Ver todos os alunos")
 			print("4 - Editar Aluno")
 			print("5 - Excluir aluno")
-			op = int(input("Digite o numero da opção do que deseja fazer: "))
-			if op == 1:
-				self.criar_aluno()
-			elif op == 2:
-				self.ver_turmas()
-			elif op == 3:
-				self.ver_todos_alunos()
-			elif op == 4:
-				self.editar_aluno()
-			elif op == 5:
-				pass
-			else:
-				print("opcao invalida")
-
-respostas_positivas = {"sim", "s", "yes", "y", "presente", "positivo"}
-respostas_negativas = {"n", "nao", "no", "negativo"}
+			try:
+				op = int(input("Digite o numero da opção do que deseja fazer: "))
+				if op == 1:
+					self.criar_aluno()
+				elif op == 2:
+					self.ver_turmas()
+				elif op == 3:
+					self.ver_todos_alunos()
+				elif op == 4:
+					self.editar_aluno()
+				elif op == 5:
+					self.excluir_aluno()
+				else:
+					print("Opção invalida")
+			except ValueError:
+				print("Apenas números são aceitos")
 
 escola = Sistema()
 escola.popular_testes()
